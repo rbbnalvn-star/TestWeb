@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Sistem Penjadwalan Kontrol Rumah Sakit - Mengelola jadwal kontrol ulang pasien pasca rawat inap secara efisien dan aman.">
+    <title>Sistem Penjadwalan Kontrol Post Ranap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="index.css?v=3">
+</head>
+
+<body>
+    <!-- ============ LOGIN SCREEN ============ -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="login-logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="10" fill="rgba(255,255,255,0.15)" />
+                        <path d="M20 8v24M8 20h24" stroke="#E8E0D0" stroke-width="3.5" stroke-linecap="round" />
+                        <circle cx="20" cy="20" r="14" stroke="#E8E0D0" stroke-width="1.5" opacity="0.4" />
+                    </svg>
+                </div>
+                <h1>RSUD CIMACAN</h1>
+                <p>Sistem Penjadwalan Kontrol Pasien</p>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="login-field">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" class="form-input" placeholder="Masukkan username" autocomplete="username" required>
+                </div>
+                <div class="login-field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Masukkan password" autocomplete="current-password" required>
+                </div>
+                <div id="loginErrorMsg" class="login-error" style="display:none;">Username atau password salah</div>
+                <button type="submit" class="btn btn-primary btn-full login-btn" id="btnLogin">Masuk</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="10" fill="rgba(255,255,255,0.15)" />
+                        <path d="M20 8v24M8 20h24" stroke="#E8E0D0" stroke-width="3.5" stroke-linecap="round" />
+                        <circle cx="20" cy="20" r="14" stroke="#E8E0D0" stroke-width="1.5" opacity="0.4" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>RSUD CIMACAN</h1>
+                    <span>Post Rawat Inap</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav" id="sidebarNav">
+            <div class="nav-section-label">MENU PERAWAT (RANAP)</div>
+            <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a href="#" class="nav-item" data-page="pasien" id="nav-pasien">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 1 0 7.75" />
+                </svg>
+                <span>Data Pasien</span>
+            </a>
+
+            <!-- Admin Area in Sidebar -->
+            <div class="nav-section-label" style="margin-top: 15px;">ADMIN AREA (RAJAL)</div>
+            <a href="#" class="nav-item admin-hidden" data-page="dashboard-rajal" id="nav-dashboard-rajal" style="display:none;">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                </svg>
+                <span>Dashboard Rajal</span>
+            </a>
+
+            <a href="#" class="nav-item admin-hidden" data-page="pasien-rajal" id="nav-pasien-rajal" style="display:none;">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                </svg>
+                <span>Data Pasien Rajal</span>
+            </a>
+            <a href="#" class="nav-item admin-hidden" data-page="kuota" id="nav-kuota" style="display:none;">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M18 20V10M12 20V4M6 20v-6" />
+                </svg>
+                <span>Kelola Kuota & Tanggal</span>
+            </a>
+
+            <div class="user-profile-wrapper" id="userProfileWrapper">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">PR</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userDisplayName">Perawat</span>
+                        <span class="user-role" id="userRoleLabel" style="font-size: 0.7rem; opacity: 0.7;">Rawat Inap</span>
+                        <div style="margin-top: 4px;">
+                            <a href="#" id="btnLogout"
+                                style="color: #ff9999; font-weight: 600; text-decoration: none; font-size: 0.72rem;">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Mobile Header -->
+    <header class="mobile-header" id="mobileHeader">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+        <h2>RSUD CIMACAN</h2>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h2 class="page-title" id="pageTitle">Dashboard</h2>
+                <span class="page-subtitle" id="pageSubtitle">Ringkasan aktivitas penjadwalan kontrol hari ini</span>
+            </div>
+            <div class="topbar-right">
+                <div class="today-date" id="todayDate"></div>
+            </div>
+        </div>
+
+        <!-- ============ PAGE: DASHBOARD ============ -->
+        <section class="page-content active" id="page-dashboard">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon bg-midnight">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="stat-card-body">
+                        <span class="stat-label">Jadwal Hari Ini</span>
+                        <span class="stat-value" id="valJadwalHariIni">0</span>
+                        <span class="stat-trend neutral">Total pendaftaran</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon bg-moss">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>
+                    </div>
+                    <div class="stat-card-body">
+                        <span class="stat-label">Kuota Tersedia</span>
+                        <span class="stat-value" id="valKuotaTersedia">0</span>
+                        <span class="stat-trend up">Sisa slot hari ini</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon bg-burgundy">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div class="stat-card-body">
+                        <span class="stat-label">Pasien Total</span>
+                        <span class="stat-value" id="valPasienBaru">0</span>
+                        <span class="stat-trend neutral">Pasien terdaftar di sistem</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Mini Calendar (Dipindah ke kiri, sebagai pusat penjadwalan) -->
+                <div class="card card-calendar" id="cardKalender">
+                    <div class="card-header">
+                        <h3>Kalender Kontrol</h3>
+                        <div class="calendar-nav">
+                            <button class="cal-nav-btn" id="calPrev" aria-label="Bulan sebelumnya">‹</button>
+                            <span class="cal-month" id="calMonthLabel"></span>
+                            <button class="cal-nav-btn" id="calNext" aria-label="Bulan berikutnya">›</button>
+                        </div>
+                    </div>
+                    <div class="dpjp-filter-inline">
+                        <span>Pilih DPJP: </span>
+                        <select id="calFilterDPJP" class="filter-select-sm">
+                            <option value="panji">dr. Panji Gugag B. S.PD</option>
+                            <option value="setyo">dr. Setyo Anestyo S.S</option>
+                            <option value="indah">dr. Indah Lestari Sp.A</option>
+                        </select>
+                    </div>
+                    <div class="mini-calendar" id="miniCalendar">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="calendar-legend">
+                        <span class="legend-item"><span class="legend-strip strip-available"></span> Tersedia</span>
+                        <span class="legend-item"><span class="legend-strip strip-full"></span> Kuota Penuh</span>
+                        <span class="legend-item"><span class="legend-strip strip-closed"></span> Libur/Tutup</span>
+                    </div>
+                </div>
+
+                <!-- Kuota Dokter -->
+                <div class="card card-quota" id="cardKuotaDokter">
+                    <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 2px;">
+                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                            <h3>Kuota Daftar Manual</h3>
+                            <a href="#" class="card-action admin-hidden" data-goto="kuota" style="display:none;">Kelola
+                                →</a>
+                        </div>
+                        <span id="quotaMonthSublabel"
+                            style="font-size: 0.78rem; color: var(--text-muted); font-weight: 500;">Bulan: -</span>
+                    </div>
+                    <div class="quota-list" id="quotaList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- ============ PAGE: DASHBOARD RAJAL (ADMIN ONLY) ============ -->
+        <section class="page-content" id="page-dashboard-rajal">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon bg-midnight">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="stat-card-body">
+                        <span class="stat-label">Jadwal Hari Ini</span>
+                        <span class="stat-value" id="valJadwalHariIniRajal">0</span>
+                        <span class="stat-trend neutral">Total pendaftaran</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon bg-moss">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>
+                    </div>
+                    <div class="stat-card-body">
+                        <span class="stat-label">Kuota Tersedia</span>
+                        <span class="stat-value" id="valKuotaTersediaRajal">0</span>
+                        <span class="stat-trend up">Sisa slot hari ini</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon bg-burgundy">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div class="stat-card-body">
+                        <span class="stat-label">Pasien Total</span>
+                        <span class="stat-value" id="valPasienBaruRajal">0</span>
+                        <span class="stat-trend neutral">Pasien terdaftar di sistem</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Mini Calendar -->
+                <div class="card card-calendar" id="cardKalenderRajal">
+                    <div class="card-header">
+                        <h3>Kalender Kontrol (Rajal)</h3>
+                        <div class="calendar-nav">
+                            <button class="cal-nav-btn" id="calPrevRajal" aria-label="Bulan sebelumnya">‹</button>
+                            <span class="cal-month" id="calMonthLabelRajal"></span>
+                            <button class="cal-nav-btn" id="calNextRajal" aria-label="Bulan berikutnya">›</button>
+                        </div>
+                    </div>
+                    <div class="dpjp-filter-inline">
+                        <span>Pilih DPJP: </span>
+                        <select id="calFilterDPJPRajal" class="filter-select-sm">
+                            <option value="panji">dr. Panji Gugag B. S.PD</option>
+                            <option value="setyo">dr. Setyo Anestyo S.S</option>
+                            <option value="indah">dr. Indah Lestari Sp.A</option>
+                        </select>
+                    </div>
+                    <div class="mini-calendar" id="miniCalendarRajal">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="calendar-legend">
+                        <span class="legend-item"><span class="legend-strip strip-available"></span> Tersedia</span>
+                        <span class="legend-item"><span class="legend-strip strip-full"></span> Kuota Penuh</span>
+                        <span class="legend-item"><span class="legend-strip strip-closed"></span> Libur/Tutup</span>
+                    </div>
+                </div>
+
+                <!-- Kuota Dokter -->
+                <div class="card card-quota" id="cardKuotaDokterRajal">
+                    <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 2px;">
+                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                            <h3>Kuota Daftar Manual (Rajal)</h3>
+                            <a href="#" class="card-action admin-hidden" data-goto="kuota" style="display:none;">Kelola
+                                →</a>
+                        </div>
+                        <span id="quotaMonthSublabelRajal"
+                            style="font-size: 0.78rem; color: var(--text-muted); font-weight: 500;">Bulan: -</span>
+                    </div>
+                    <div class="quota-list" id="quotaListRajal">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- ============ PAGE: DATA PASIEN ============ -->
+        <section class="page-content" id="page-pasien">
+            <div class="page-actions-bar">
+                <div class="filter-group">
+
+                    <input type="text" class="search-input-inline" placeholder="Cari nama / No. RM pasien..."
+                        id="searchPasien">
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="data-table" id="tablePasien">
+                        <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <th>No. RM</th>
+                                <th>Nama Pasien</th>
+                                <th>No. Handphone</th>
+                                <th>DPJP</th>
+                                <th>Tanggal Kontrol</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyPasien">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ PAGE: DATA PASIEN RAJAL (ADMIN ONLY) ============ -->
+        <section class="page-content" id="page-pasien-rajal">
+            <div class="page-actions-bar">
+                <div class="filter-group">
+                    <input type="text" class="search-input-inline" placeholder="Cari nama / No. RM pasien Rajal..."
+                        id="searchPasienRajal">
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="data-table" id="tablePasienRajal">
+                        <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <th>No. RM</th>
+                                <th>Nama Pasien</th>
+                                <th>No. Handphone</th>
+                                <th>DPJP</th>
+                                <th>Tanggal Kontrol</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyPasienRajal">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ PAGE: KELOLA KUOTA (ADMIN ONLY) ============ -->
+        <section class="page-content" id="page-kuota">
+            <div class="kuota-info-banner">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <p><strong>Mode Admin:</strong> Anda dapat meng-override status tanggal (Buka/Tutup) di luar jadwal
+                    reguler dokter dan hari libur nasional.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Override Status Tanggal</h3>
+                </div>
+                <div style="padding: 24px;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pilih Tanggal</label>
+                            <input type="date" class="form-input" id="adminOverrideDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Pilih DPJP</label>
+                            <select class="form-input" id="adminOverrideDPJP">
+                                <option value="panji">dr. Panji Gugag B. S.PD</option>
+                                <option value="setyo">dr. Setyo Anestyo S.S</option>
+                                <option value="indah">dr. Indah Lestari Sp.A</option>
+                            </select>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button class="btn btn-primary" id="btnAdminSetBuka">Set "Buka" (Paksa Buka)</button>
+                        <button class="btn btn-outline" id="btnAdminSetTutup"
+                            style="color: var(--burgundy); border-color: var(--burgundy);">Set "Tutup" (Paksa
+                            Libur)</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Set Kuota Khusus</h3>
+                </div>
+                <div style="padding: 24px;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pilih Tanggal</label>
+                            <input type="date" class="form-input" id="adminQuotaDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Pilih DPJP</label>
+                            <select class="form-input" id="adminQuotaDPJP">
+                                <option value="panji">dr. Panji Gugag B. S.PD</option>
+                                <option value="setyo">dr. Setyo Anestyo S.S</option>
+                                <option value="indah">dr. Indah Lestari Sp.A</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Atur Kuota Baru</label>
+                            <input type="number" class="form-input" id="adminQuotaValue" placeholder="Contoh: 15">
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-primary" id="btnAdminSetQuota">Simpan Kuota Khusus</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal: Buat Jadwal Baru -->
+    <div class="modal-overlay" id="modalJadwalOverlay">
+        <div class="modal" id="modalJadwalBaru">
+            <div class="modal-header">
+                <h3>Buat Jadwal Kontrol Baru</h3>
+                <button class="modal-close" id="modalClose" aria-label="Tutup modal">&times;</button>
+            </div>
+            <form id="formPendaftaranPasien" autocomplete="off">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inputNamaPasien">Nama Pasien <span style="color:red">*</span></label>
+                            <input type="text" class="form-input" id="inputNamaPasien"
+                                placeholder="Masukkan nama pasien" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputNoRM">No. Rekam Medis <span style="color:red">*</span></label>
+                            <input type="text" class="form-input" id="inputNoRM" placeholder="Contoh: 12345678" required
+                                maxlength="8" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inputHP">No. Handphone <span style="color:red">*</span></label>
+                            <input type="tel" class="form-input" id="inputHP" placeholder="08xxxxxxxxxx" required
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        </div>
+                        <div class="form-group">
+                            <label for="selectDokter">Dokter DPJP <span style="color:red">*</span></label>
+                            <select class="form-input" id="selectDokter" required>
+                                <option value="">Pilih Dokter...</option>
+                                <option value="panji">dr. Panji Gugag B. S.PD</option>
+                                <option value="setyo">dr. Setyo Anestyo S.S</option>
+                                <option value="indah">dr. Indah Lestari Sp.A</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="selectUnit">Kategori Unit <span style="color:red">*</span></label>
+                            <select class="form-input" id="selectUnit" required disabled>
+                                <option value="ranap">Rawat Inap</option>
+                                <option value="rajal">Rawat Jalan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputTglKontrol">Tanggal Kontrol <span style="color:red">*</span></label>
+                            <input type="date" class="form-input" id="inputTglKontrol" required>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 12px;">
+                        <div class="form-group" style="grid-column:span 2;">
+                            <label for="inputCatatan">Catatan Tambahan (Opsional)</label>
+                            <textarea class="form-input" id="inputCatatan"
+                                placeholder="Contoh: Pasien HD Rutin, bawa berkas rujukan, pasien kontrol rutin"
+                                rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="quota-check-result" id="quotaCheckResult" style="display:none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" id="btnBatalModal">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="btnSimpanJadwal">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Preview Pasien / Detail Tanggal Kalender -->
+    <div class="modal-overlay" id="modalPreviewOverlay">
+        <div class="modal" style="max-width: 560px;">
+            <div class="modal-header">
+                <div>
+                    <h3 id="previewModalTitle">Detail Control Tanggal</h3>
+                    <span id="previewModalSubtitle"
+                        style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">DPJP: -</span>
+                </div>
+                <button class="modal-close" id="modalPreviewClose">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px 24px;">
+                <!-- Status & Quota Summary Cards -->
+                <div id="previewModalQuotaSummary"
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;"></div>
+
+                <!-- Patient List Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4
+                        style="font-size: 0.85rem; font-weight: 700; color: var(--midnight-blue); display: flex; align-items: center; gap: 6px;">
+                        📋 Daftar Pasien Terjadwal
+                    </h4>
+                    <span id="previewPatientCount"
+                        style="font-size: 0.72rem; background: var(--ivory); color: var(--umber); padding: 3px 10px; border-radius: 12px; font-weight: 600;">0
+                        Pasien</span>
+                </div>
+
+                <!-- Patient List Table / Container -->
+                <div id="previewPatientListContainer"
+                    style="max-height: 220px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: #fff;">
+                </div>
+            </div>
+            <div class="modal-footer" style="justify-content: space-between;">
+                <button class="btn btn-primary" id="btnPreviewTambahJadwal" style="font-size: 0.8rem;">
+                    + Tambah Pasien di Tanggal Ini
+                </button>
+                <button class="btn btn-ghost" id="btnPreviewClose">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Login & Credential dihapus: diganti login screen awal -->
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
+    <script src="app.js?v=5"></script>
+</body>
+
+</html>
